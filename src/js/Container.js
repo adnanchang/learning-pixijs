@@ -21,17 +21,19 @@ export default class Container {
         this.animate = false;
 
         this.container1 = new this.PIXI.Container();
+        this.width = 75;
+        this.height = 50;
         this.graphics = new this.PIXI.Graphics();
         this.graphics.beginFill(0x2F7455); 
         this.graphics.drawRect(10, 10, 75, 50); 
         this.graphics.endFill();
         this.graphics.interactive = true;
         this.graphics.click = function (){
-            self.graphics.clear();
-            self.graphics.beginFill(0x2F7455); 
-            self.graphics.drawRect(10, 10, window.innerWidth - 50, window.innerHeight); 
-            self.graphics.endFill();
+            self.grow();
             console.log("I WAS CLICKED");
+            // CHECK THESE OUT
+            // https://stackoverflow.com/questions/29035084/zoom-to-cursor-position-pixi-js
+            // https://bl.ocks.org/pkerpedjiev/cf791db09ebcabaec0669362f4df1776
         }
         this.container1.backgroundColor = 0x2F7455;
         
@@ -109,5 +111,20 @@ export default class Container {
                 this.animate = false;
             }
         }
+    }
+
+    grow() {
+        requestAnimationFrame(this.grow.bind(this));
+
+        if (this.width < window.innerHeight - 50 && this.height < window.innerHeight){
+            this.graphics.clear();
+            this.graphics.beginFill(0x2F7455); 
+            this.graphics.drawRect(10, 10, this.width, this.height); 
+            this.graphics.endFill();
+
+            this.width += 10;
+            this.height += 5;
+        }
+        
     }
 }
