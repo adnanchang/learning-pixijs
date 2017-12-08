@@ -2,9 +2,12 @@ export default class Container {
     constructor(PIXI) {
         var self = this;
         this.PIXI = PIXI;
+
+        this.pixiCanvas = d3.select('#pixiCanvas')
         this.renderer = this.PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
             transparent: true,
-            resolution: 1
+            anitalias: true,
+            view: this.pixiCanvas.node()
         });
 
         document.getElementById('display').appendChild(this.renderer.view);
@@ -19,15 +22,20 @@ export default class Container {
         this.maxScale = 1;
         this.reduced = false;
         this.animate = false;
+        this.globalMousePosition;
+        this.localMousePosition;
+        this.zoomOnPrevFrame = false;
+        this.zoomSpeed = 0.3;
 
         this.container1 = new this.PIXI.Container();
         this.width = 75;
         this.height = 50;
         this.graphics = new this.PIXI.Graphics();
-        this.graphics.beginFill(0x2F7455); 
-        this.graphics.drawRect(10, 10, 75, 50); 
+        this.graphics.beginFill(0x2F7455);
+        this.graphics.drawRect(10, 10, 75, 50);
         this.graphics.endFill();
         this.graphics.interactive = true;
+        this.container1.interactive = true;
         this.graphics.click = function (){
             self.grow();
             console.log("I WAS CLICKED");
@@ -36,20 +44,25 @@ export default class Container {
             // https://bl.ocks.org/pkerpedjiev/cf791db09ebcabaec0669362f4df1776
         }
         this.container1.backgroundColor = 0x2F7455;
-        
+
         this.container2 = new this.PIXI.Container();
         this.graphics2= new this.PIXI.Graphics();
-        this.graphics2.beginFill(0xCC6114); 
-        this.graphics2.drawRect(30, 30, 75, 50); 
+        this.graphics2.beginFill(0xCC6114);
+        this.graphics2.drawRect(30, 30, 75, 50);
         this.graphics2.endFill();
-        
-        this.container2.addChild(this.graphics2);
+
+        // this.container2.addChild(this.graphics2);
         this.container1.addChild(this.graphics);
 
         this.stage.addChild(this.container1);
-        this.stage.addChild(this.container2);
+        // this.stage.addChild(this.container2);
 
         this.animation();
+        this.intialization();
+
+        this.pixiCanvas.call(d3.zoom()
+          .scaleExtent([1, 8])
+          .on("zoom", self.zoom.bind(self)));
     }
 
     setup() {
@@ -113,18 +126,21 @@ export default class Container {
         }
     }
 
-    grow() {
-        requestAnimationFrame(this.grow.bind(this));
-
-        if (this.width < window.innerHeight - 50 && this.height < window.innerHeight){
-            this.graphics.clear();
-            this.graphics.beginFill(0x2F7455); 
-            this.graphics.drawRect(10, 10, this.width, this.height); 
-            this.graphics.endFill();
-
-            this.width += 10;
-            this.height += 5;
-        }
-        
+    intialization() {
+      var self = this;
+      this.container1.mousemove = this.container1.touchmove = function(event) {
+        self.globalMousePosition = event.data.getLocalPosition(self.stage);
+      }
     }
+
+    grow() {
+      requestAnimationFrame(this.grow.bind(this));
+    }
+
+    zoom() {
+      this.container1.position.x = d3.event.translate[0];
+      this.container1.position.y = d3.event.translate[1];
+      this.container1.scale.x = d3.event.scale;
+      this.container1.scale.y = d3.event.scale;
+  }
 }

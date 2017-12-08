@@ -1,7 +1,9 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <div id="display"></div>
+    <div id="display">
+      <canvas id="pixiCanvas"></canvas>
+    </div>
   </div>
 </template>
 

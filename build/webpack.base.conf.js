@@ -87,10 +87,5 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  },
-  vue: {
-    html: {
-      root: path.resolve(__dirname, '../src/assets')
-    }
   }
 }
