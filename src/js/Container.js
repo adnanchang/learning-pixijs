@@ -1,16 +1,17 @@
+//http://www.kaleadis.de/lab/04-pixi-cam/
+
 export default class Container {
     constructor(PIXI) {
         var self = this;
         this.PIXI = PIXI;
 
-        this.pixiCanvas = d3.select('#pixiCanvas')
         this.renderer = this.PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
             transparent: true,
-            anitalias: true,
-            view: this.pixiCanvas.node()
+            anitalias: true
         });
 
         document.getElementById('display').appendChild(this.renderer.view);
+        this.renderer.view.style.border = "1px dashed black";
 
         this.stage = new this.PIXI.Container();
 
@@ -36,33 +37,28 @@ export default class Container {
         this.graphics.endFill();
         this.graphics.interactive = true;
         this.container1.interactive = true;
+        this.stage.interactive = true;
         this.graphics.click = function (){
+            self.animate = true;
             self.grow();
             console.log("I WAS CLICKED");
-            // CHECK THESE OUT
-            // https://stackoverflow.com/questions/29035084/zoom-to-cursor-position-pixi-js
-            // https://bl.ocks.org/pkerpedjiev/cf791db09ebcabaec0669362f4df1776
         }
         this.container1.backgroundColor = 0x2F7455;
 
         this.container2 = new this.PIXI.Container();
         this.graphics2= new this.PIXI.Graphics();
         this.graphics2.beginFill(0xCC6114);
-        this.graphics2.drawRect(30, 30, 75, 50);
+        this.graphics2.drawRect(this.renderer.width - 200, this.renderer.height - 500, 75, 50);
         this.graphics2.endFill();
 
         // this.container2.addChild(this.graphics2);
-        this.container1.addChild(this.graphics);
+        // this.container1.addChild(this.graphics);
 
-        this.stage.addChild(this.container1);
+        this.stage.addChild(this.graphics);
         // this.stage.addChild(this.container2);
 
         this.animation();
         this.intialization();
-
-        this.pixiCanvas.call(d3.zoom()
-          .scaleExtent([1, 8])
-          .on("zoom", self.zoom.bind(self)));
     }
 
     setup() {
@@ -128,19 +124,30 @@ export default class Container {
 
     intialization() {
       var self = this;
-      this.container1.mousemove = this.container1.touchmove = function(event) {
+      this.stage.mousemove = this.stage.touchmove = function(event) {
         self.globalMousePosition = event.data.getLocalPosition(self.stage);
       }
     }
 
     grow() {
-      requestAnimationFrame(this.grow.bind(this));
-    }
+        requestAnimationFrame(this.grow.bind(this));
+        
+        /* 
+        NEXT PLAN OF ACTION
+        Change the size of the graphics according to the stage. MAKE IT RELATIVE
+        For example, take 20% size of the stage and use that as the size of the graphics
+        Then when you change the scale of the container you can zoom in 220% so that the 20% size of
+        The graphics fits in within the main container i.e. stage
+        */
 
-    zoom() {
-      this.container1.position.x = d3.event.translate[0];
-      this.container1.position.y = d3.event.translate[1];
-      this.container1.scale.x = d3.event.scale;
-      this.container1.scale.y = d3.event.scale;
-  }
+        this.stage.pivot.x = this.graphics.width / 2;
+        this.stage.pivot.y = this.graphics.height / 2;
+        if (this.stage.scale.x < 20) {
+            this.stage.scale.x = (this.stage.scale.x * 1.25).toFixed(1);
+        }
+        if (this.stage.scale.y < 20) {
+            this.stage.scale.y = (this.stage.scale.y * 1.25).toFixed(1);
+        }
+        
+    }
 }

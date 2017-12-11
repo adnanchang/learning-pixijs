@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
     <div id="display">
-      <canvas id="pixiCanvas"></canvas>
     </div>
   </div>
 </template>
@@ -32,7 +30,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-#display {
+#canvas {
   border: 1px dashed black;
 }
 h1, h2 {
