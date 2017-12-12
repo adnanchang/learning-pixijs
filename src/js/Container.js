@@ -1,5 +1,5 @@
 //http://www.kaleadis.de/lab/04-pixi-cam/
-
+//http://plnkr.co/edit/II6lgj511fsQ7l0QCoRi?p=preview
 export default class Container {
     constructor(PIXI) {
         var self = this;
@@ -33,13 +33,15 @@ export default class Container {
         this.height = 50;
         this.graphics = new this.PIXI.Graphics();
         this.graphics.beginFill(0x2F7455);
-        this.graphics.drawRect(10, 10, 75, 50);
+        this.graphics.drawRect(100, 100, 75, 50);
         this.graphics.endFill();
         this.graphics.interactive = true;
         this.container1.interactive = true;
         this.stage.interactive = true;
         this.graphics.click = function (){
             self.animate = true;
+            var mouseX = self.globalMousePosition.x;
+            var mouseY = self.globalMousePosition.y;
             self.grow();
             console.log("I WAS CLICKED");
         }
@@ -130,7 +132,7 @@ export default class Container {
     }
 
     grow() {
-        requestAnimationFrame(this.grow.bind(this));
+        // requestAnimationFrame(this.grow.bind(this));
         
         /* 
         NEXT PLAN OF ACTION
@@ -139,15 +141,36 @@ export default class Container {
         Then when you change the scale of the container you can zoom in 220% so that the 20% size of
         The graphics fits in within the main container i.e. stage
         */
+        var self = this;
+        var s = 2;
+        var newSize = this.graphics.getBounds();
+        var x = newSize.width/2;
+        var y = newSize.height/2;
+        console.log(this.stage.x);
+        var worldPos = {
+            x: (x - this.stage.x) / this.stage.scale.x, 
+            y: (y - this.stage.y) / this.stage.scale.y
+        };
+        console.log("WORLD POS: " + worldPos.x + ' ' + worldPos.y);
+        var newScale = {
+            x: this.stage.scale.x * s, 
+            y: this.stage.scale.y * s
+        };
+        console.log("NEW SCALE: " + newScale.x + ' ' + newScale.y);
+        // var newScreenPos = {
+        //     x: (worldPos.x ) * newScale.x + this.stage.x, 
+        //     y: (worldPos.y) * newScale.y + this.stage.y
+        // };
+        var newScreenPos = {
+            x: x + this.stage.x, 
+            y: y + this.stage.y
+        };
+        console.log("NEW SCREEN POS: " + newScreenPos.x + ' ' + newScreenPos.y);
 
-        this.stage.pivot.x = this.graphics.width / 2;
-        this.stage.pivot.y = this.graphics.height / 2;
-        if (this.stage.scale.x < 20) {
-            this.stage.scale.x = (this.stage.scale.x * 1.25).toFixed(1);
-        }
-        if (this.stage.scale.y < 20) {
-            this.stage.scale.y = (this.stage.scale.y * 1.25).toFixed(1);
-        }
-        
+        // this.stage.x = (newScreenPos.x - x);
+        // this.stage.y = (newScreenPos.y - y);
+        this.graphics.x = newScreenPos.x;
+        this.stage.scale.x = newScale.x;
+        this.stage.scale.y = newScale.y;
     }
 }
