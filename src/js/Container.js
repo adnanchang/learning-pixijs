@@ -157,19 +157,24 @@ export default class Container {
             y: this.stage.scale.y * s
         };
         console.log("NEW SCALE: " + newScale.x + ' ' + newScale.y);
-        // var newScreenPos = {
-        //     x: (worldPos.x ) * newScale.x + this.stage.x, 
-        //     y: (worldPos.y) * newScale.y + this.stage.y
-        // };
         var newScreenPos = {
-            x: x + this.stage.x, 
-            y: y + this.stage.y
+            x: (worldPos.x ) * newScale.x + this.stage.x, 
+            y: (worldPos.y) * newScale.y + this.stage.y
         };
+        // var newScreenPos = {
+        //     x: x + this.stage.x, 
+        //     y: y + this.stage.y
+        // };
         console.log("NEW SCREEN POS: " + newScreenPos.x + ' ' + newScreenPos.y);
 
         // this.stage.x = (newScreenPos.x - x);
         // this.stage.y = (newScreenPos.y - y);
-        this.graphics.x = newScreenPos.x;
+        this.stage.x -= (newScreenPos.x-x);
+        this.stage.y -= (newScreenPos.y-y);
+        this.graphics.x -= (newScreenPos.x-x);
+        this.graphics.y -= (newScreenPos.y-y);
+        console.log("NEW GRAPHIC POS: " + this.graphics.x + ' ' + this.graphics.y);
+        console.log("NEW STAGE POS: " + this.stage.x + ' ' + this.stage.y);
         this.stage.scale.x = newScale.x;
         this.stage.scale.y = newScale.y;
     }
