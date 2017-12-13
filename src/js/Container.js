@@ -133,49 +133,69 @@ export default class Container {
 
     grow() {
         // requestAnimationFrame(this.grow.bind(this));
-        
-        /* 
+
+        /*
         NEXT PLAN OF ACTION
         Change the size of the graphics according to the stage. MAKE IT RELATIVE
         For example, take 20% size of the stage and use that as the size of the graphics
         Then when you change the scale of the container you can zoom in 220% so that the 20% size of
         The graphics fits in within the main container i.e. stage
         */
-        var self = this;
-        var s = 2;
+        // var self = this;
+        // var s = 2;
+        // var newSize = this.graphics.getBounds();
+        // var x = newSize.width/2;
+        // var y = newSize.height/2;
+        // console.log(this.stage.x);
+        // var worldPos = {
+        //     x: (x - this.stage.x) / this.stage.scale.x,
+        //     y: (y - this.stage.y) / this.stage.scale.y
+        // };
+        // console.log("WORLD POS: " + worldPos.x + ' ' + worldPos.y);
+        // var newScale = {
+        //     x: this.stage.scale.x * s,
+        //     y: this.stage.scale.y * s
+        // };
+        // console.log("NEW SCALE: " + newScale.x + ' ' + newScale.y);
+        // var newScreenPos = {
+        //     x: (worldPos.x ) * newScale.x + this.stage.x,
+        //     y: (worldPos.y) * newScale.y + this.stage.y
+        // };
+        // // var newScreenPos = {
+        // //     x: x + this.stage.x,
+        // //     y: y + this.stage.y
+        // // };
+        // console.log("NEW SCREEN POS: " + newScreenPos.x + ' ' + newScreenPos.y);
+
+        // // this.stage.x = (newScreenPos.x - x);
+        // // this.stage.y = (newScreenPos.y - y);
+        // this.stage.x -= (newScreenPos.x-x);
+        // this.stage.y -= (newScreenPos.y-y);
+        // this.graphics.x -= (newScreenPos.x-x);
+        // this.graphics.y -= (newScreenPos.y-y);
+        // console.log("NEW GRAPHIC POS: " + this.graphics.x + ' ' + this.graphics.y);
+        // console.log("NEW STAGE POS: " + this.stage.x + ' ' + this.stage.y);
+
+        console.log("++++++++++++++BEFORE CLICK+++++++++++++++++")
+        console.log("STAGE PIVOT " + this.stage.pivot.x + " " + this.stage.pivot.y);
+        console.log("STAGE POSITION " + this.stage.position.x + " " + this.stage.position.y);
+        console.log("GRAPHICS XY " + this.graphics.x + " " + this.graphics.y);
+        console.log("GRAPHICS POSITION " + this.graphics.position.x + " " + this.graphics.position.y);
+        this.stage.scale.x += 1;
+        this.stage.scale.y += 1;
         var newSize = this.graphics.getBounds();
         var x = newSize.width/2;
         var y = newSize.height/2;
-        console.log(this.stage.x);
-        var worldPos = {
-            x: (x - this.stage.x) / this.stage.scale.x, 
-            y: (y - this.stage.y) / this.stage.scale.y
-        };
-        console.log("WORLD POS: " + worldPos.x + ' ' + worldPos.y);
-        var newScale = {
-            x: this.stage.scale.x * s, 
-            y: this.stage.scale.y * s
-        };
-        console.log("NEW SCALE: " + newScale.x + ' ' + newScale.y);
-        var newScreenPos = {
-            x: (worldPos.x ) * newScale.x + this.stage.x, 
-            y: (worldPos.y) * newScale.y + this.stage.y
-        };
-        // var newScreenPos = {
-        //     x: x + this.stage.x, 
-        //     y: y + this.stage.y
-        // };
-        console.log("NEW SCREEN POS: " + newScreenPos.x + ' ' + newScreenPos.y);
-
-        // this.stage.x = (newScreenPos.x - x);
-        // this.stage.y = (newScreenPos.y - y);
-        this.stage.x -= (newScreenPos.x-x);
-        this.stage.y -= (newScreenPos.y-y);
-        this.graphics.x -= (newScreenPos.x-x);
-        this.graphics.y -= (newScreenPos.y-y);
-        console.log("NEW GRAPHIC POS: " + this.graphics.x + ' ' + this.graphics.y);
-        console.log("NEW STAGE POS: " + this.stage.x + ' ' + this.stage.y);
-        this.stage.scale.x = newScale.x;
-        this.stage.scale.y = newScale.y;
+        this.graphics.x = newSize.x;
+        this.graphics.y = newSize.y;
+        this.stage.position.x = newSize.x;
+        this.stage.position.y = newSize.y;
+        this.stage.pivot.set(newSize.x + x, newSize.y + y);
+        console.log("++++++++++++++AFTER CLICK+++++++++++++++++")
+        console.log("STAGE PIVOT " + this.stage.pivot.x + " " + this.stage.pivot.y);
+        console.log("STAGE POSITION " + this.stage.position.x + " " + this.stage.position.y);
+        console.log("GRAPHICS XY " + newSize.x + " " + newSize.y);
+        console.log("GRAPHICS POSITION " + newSize.x + " " + newSize.y);
+        //MOVE THE DAMN RECTANGLE!
     }
 }
