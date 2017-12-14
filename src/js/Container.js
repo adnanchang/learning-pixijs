@@ -96,6 +96,11 @@ export default class Container {
       var pivotGoalX = oldSize.x;
       var pivotGoalY = oldSize.y;
 
+      /*
+      Transform your screen to four quadrants
+      Each quadrant will tell you how to set your pivotGoal  
+      */
+
       var percentageX = (5 / 100) * pivotGoalX;
       var percentageY = (5 / 100) * pivotGoalY;
       var perX = (5 / 100) * scaleGoalX;
